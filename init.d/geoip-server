@@ -1,0 +1,55 @@
+#!/bin/bash
+
+PID_FILE="/tmp/giss.pid"
+
+start() {
+    forever --pidFile $PID_FILE start /opt/pinecast-geoip-server/index.js
+    RETVAL=$?
+}
+
+stop() {
+    if [ -f $PID_FILE ]; then
+        forever stop /opt/pinecast-geoip-server/index.js
+        rm -f $PID_FILE
+        RETVAL=$?
+    else
+        echo "pinecast-geoip-server not running"
+        RETVAL=0
+    fi
+}
+
+restart() {
+    stop
+    start
+}
+
+status() {
+    echo `forever list` | grep -q "/opt/pinecast-geoip-server/index.js"
+    if ["$?" -eq "0" ]; then
+        echo "pinecast-geoip-server is running."
+        RETVAL=0
+    else
+        echo "pinecast-geoip-server is not running."
+        RETVAL=3
+    fi
+}
+
+case "$1" in
+    start)
+        start
+        ;;
+    stop)
+        stop
+        ;;
+    status)
+        status
+        ;;
+    restart)
+        restart
+        ;;
+    *)
+        echo "Usage: {start|stop|status|restart}"
+        exit 1
+        ;;
+esac
+exit $RETVAL
