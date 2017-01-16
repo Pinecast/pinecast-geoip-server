@@ -8,7 +8,7 @@ const maxmind = require('maxmind');
 const app = express();
 app.use(bodyParser.json());
 
-const cityData = maxmind.openSync(process.env.MM_CITY || '/var/data/geopip/city.mmdb');
+const cityData = maxmind.openSync(process.env.MM_CITY || '/var/data/geoip/city.mmdb');
 
 
 app.post('/bulk', (req, res) => {
