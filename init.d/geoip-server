@@ -1,9 +1,11 @@
 #!/bin/bash
 
 PID_FILE="/tmp/giss.pid"
+LOG_FILE="/tmp/giss.log"
+ERROR_LOG="/tmp/giss.err.log"
 
 start() {
-    forever --pidFile $PID_FILE start /opt/pinecast-geoip-server/index.js
+    forever --pidFile $PID_FILE -l $LOG_FILE -e $ERROR_LOG start /opt/pinecast-geoip-server/index.js
     RETVAL=$?
 }
 
