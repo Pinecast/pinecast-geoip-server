@@ -1,0 +1,29 @@
+{
+  "name": "pinecast-geoip-server",
+  "version": "1.0.0",
+  "description": "A simple geoip lookup server",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Pinecast/pinecast-geoip-server.git"
+  },
+  "keywords": [
+    "pinecast",
+    "geoip"
+  ],
+  "author": "Matt Basta <me@mattbasta.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Pinecast/pinecast-geoip-server/issues"
+  },
+  "homepage": "https://github.com/Pinecast/pinecast-geoip-server#readme",
+  "dependencies": {
+    "body-parser": "^1.15.2",
+    "express": "^4.14.0",
+    "maxmind": "^2.1.0"
+  }
+}
