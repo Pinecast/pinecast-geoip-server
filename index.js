@@ -31,8 +31,6 @@ app.post('/bulk', (req, res) => {
             return cache[x] = null;
         }
 
-        console.log(data);
-
         return cache[x] = {
             city: data.city && data.city.names && (data.city.names.en || data.city.names[Object.keys(data.city.names)[0]]),
             // country: data.country.names.en || data.country.names[Object.keys(data.country.names)[0]],
