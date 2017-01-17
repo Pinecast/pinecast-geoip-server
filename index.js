@@ -27,7 +27,7 @@ app.post('/bulk', (req, res) => {
             return cache[x];
         }
         const data = cityData.get(x);
-        if (!data) {
+        if (!data || !data.city) {
             return cache[x] = null;
         }
 
