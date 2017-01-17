@@ -27,14 +27,19 @@ app.post('/bulk', (req, res) => {
             return cache[x];
         }
         const data = cityData.get(x);
-        if (!data || !data.city) {
+        if (!data || !data.country) {
             return cache[x] = null;
         }
 
+        console.log(data);
+
         return cache[x] = {
-            city: data.city.names.en || data.city.names[Object.keys(data.city.names)[0]],
-            country: data.country.names.en || data.country.names[Object.keys(data.country.names)[0]],
-            country_code: data.country.iso_code,
+            city: data.city && data.city.names && (data.city.names.en || data.city.names[Object.keys(data.city.names)[0]]),
+            // country: data.country.names.en || data.country.names[Object.keys(data.country.names)[0]],
+            code: data.country && data.country.iso_code || null,
+            zip: data.postal && data.postal.code || null,
+            lat: data.location && data.location.latitude && data.location.latitude.toFixed && data.location.latitude.toFixed(3),
+            lon: data.location && data.location.longitude && data.location.longitude.toFixed && data.location.longitude.toFixed(3),
         };
     }));
 });
