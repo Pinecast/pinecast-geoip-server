@@ -2,6 +2,7 @@
 
 const bodyParser = require('body-parser');
 const express = require('express');
+const irc = require('ip-range-check');
 const maxmind = require('maxmind');
 
 
@@ -9,6 +10,8 @@ const app = express();
 app.use(bodyParser.json());
 
 const cityData = maxmind.openSync(process.env.MM_CITY || '/var/data/geoip/city.mmdb');
+const awsRanges = require('./aws-ranges.json').prefixes.filter(x => x.ip_prefix);
+const awsIpPrefixes = awsRanges.map(x => x.ip_prefix);
 
 
 app.post('/bulk', (req, res) => {
@@ -26,6 +29,7 @@ app.post('/bulk', (req, res) => {
         if (typeof cache[x] !== 'undefined') {
             return cache[x];
         }
+
         const data = cityData.get(x);
         if (!data || !data.country) {
             return cache[x] = null;
@@ -39,6 +43,8 @@ app.post('/bulk', (req, res) => {
             }
         }
 
+        const isDataCenter = irc(x, awsIpPrefixes);
+
         return cache[x] = {
             city: cityName,
             // country: data.country.names.en || data.country.names[Object.keys(data.country.names)[0]],
@@ -46,6 +52,7 @@ app.post('/bulk', (req, res) => {
             zip: data.postal && data.postal.code || null,
             lat: data.location && data.location.latitude && data.location.latitude.toFixed && data.location.latitude.toFixed(3),
             lon: data.location && data.location.longitude && data.location.longitude.toFixed && data.location.longitude.toFixed(3),
+            dc: isDataCenter,
         };
     }));
 });
