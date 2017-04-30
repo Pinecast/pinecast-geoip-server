@@ -31,8 +31,16 @@ app.post('/bulk', (req, res) => {
             return cache[x] = null;
         }
 
+        let cityName = data.city && data.city.names && (data.city.names.en || data.city.names[Object.keys(data.city.names)[0]]);
+        if (cityName && data.subdivisions && data.subdivisions.length) {
+            const sd = data.subdivisions[0];
+            if (sd.names && sd.names.en) {
+                cityName = `${cityName}, ${sd.names.en}`;
+            }
+        }
+
         return cache[x] = {
-            city: data.city && data.city.names && (data.city.names.en || data.city.names[Object.keys(data.city.names)[0]]),
+            city: cityName,
             // country: data.country.names.en || data.country.names[Object.keys(data.country.names)[0]],
             code: data.country && data.country.iso_code || null,
             zip: data.postal && data.postal.code || null,
