@@ -45,13 +45,16 @@ app.post('/bulk', (req, res) => {
 
         const isDataCenter = irc(x, awsIpPrefixes);
 
+        const lat = Number(data.location && data.location.latitude && data.location.latitude.toFixed && data.location.latitude.toFixed(3));
+        const lon = Number(data.location && data.location.longitude && data.location.longitude.toFixed && data.location.longitude.toFixed(3));
+
         return cache[x] = {
             city: cityName,
             // country: data.country.names.en || data.country.names[Object.keys(data.country.names)[0]],
             code: data.country && data.country.iso_code || null,
             zip: data.postal && data.postal.code || null,
-            lat: data.location && data.location.latitude && data.location.latitude.toFixed && data.location.latitude.toFixed(3),
-            lon: data.location && data.location.longitude && data.location.longitude.toFixed && data.location.longitude.toFixed(3),
+            lat: isNaN(lat) ? 0 : lat,
+            lon: isNaN(lon) ? 0 : lon,
             dc: isDataCenter,
         };
     }));
